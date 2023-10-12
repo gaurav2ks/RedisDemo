@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RedisDemo.Data;
 using StackExchange.Redis;
+using log4net;
+using Microsoft.Extensions.Logging.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +24,16 @@ string redisConfiguration = configuration["Configuration"];
 builder.Services.AddSingleton<IConnectionMultiplexer>(
     ConnectionMultiplexer.Connect(redisConfiguration)
 );
+
+//IConfiguration log4NetConfig = builder.Configuration.GetSection("log4net") ?? throw new InvalidOperationException("Log4Net configuration section not found."); ;
+//string loggingConfiguration = log4NetConfig["Configuration"];
+
+//builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddConfiguration(log4NetConfig));
+
+builder.Services.AddLogging(builder =>
+{
+    builder.AddLog4Net("log4net.config");
+});
 
 var app = builder.Build();
 
@@ -47,5 +60,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
 
 app.Run();
