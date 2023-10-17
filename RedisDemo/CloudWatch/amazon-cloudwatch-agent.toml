@@ -1,0 +1,65 @@
+[agent]
+  collection_jitter = "0s"
+  debug = false
+  flush_interval = "1s"
+  flush_jitter = "0s"
+  hostname = ""
+  interval = "10s"
+  logfile = "C:\\ProgramData\\Amazon\\AmazonCloudWatchAgent\\Logs\\amazon-cloudwatch-agent.log"
+  logtarget = "lumberjack"
+  metric_batch_size = 1000
+  metric_buffer_limit = 10000
+  omit_hostname = false
+  precision = ""
+  quiet = false
+  round_interval = false
+
+[inputs]
+
+  [[inputs.logfile]]
+    destination = "cloudwatchlogs"
+    file_state_folder = "C:\\ProgramData\\Amazon\\AmazonCloudWatchAgent\\Logs\\state"
+
+    [[inputs.logfile.file_config]]
+      file_path = "C:\\Users\\Administrator\\Documents\\Projects\\RedisDemo\\RedisDemo\\logs\\application.log"
+      from_beginning = true
+      log_group_name = "/apps/RedisDemoApplicationLogs/"
+      log_stream_name = "IP_ADDRESS-EC2_INSTANCE_ID"
+      pipe = false
+      retention_in_days = -1
+      timezone = "LOCAL"
+
+  [[inputs.win_perf_counters]]
+    DisableReplacer = true
+    alias = "4283769065"
+
+    [[inputs.win_perf_counters.object]]
+      Counters = ["% Free Space"]
+      Instances = ["*"]
+      Measurement = "LogicalDisk"
+      ObjectName = "LogicalDisk"
+      WarnOnMissing = true
+    [inputs.win_perf_counters.tags]
+      "aws:StorageResolution" = "true"
+
+  [[inputs.win_perf_counters]]
+    DisableReplacer = true
+    alias = "1492679118"
+
+    [[inputs.win_perf_counters.object]]
+      Counters = ["% Committed Bytes In Use"]
+      Instances = ["------"]
+      Measurement = "Memory"
+      ObjectName = "Memory"
+      WarnOnMissing = true
+    [inputs.win_perf_counters.tags]
+      "aws:StorageResolution" = "true"
+
+[outputs]
+
+  [[outputs.cloudwatch]]
+
+  [[outputs.cloudwatchlogs]]
+    force_flush_interval = "5s"
+    log_stream_name = "EC2_INSTANCE_ID"
+    region = "ap-south-1"

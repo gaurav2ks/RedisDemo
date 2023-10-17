@@ -1,0 +1,20 @@
+{
+	"agent": {
+	  "metrics_collection_interval": 10,
+	  "run_as_user": "root"
+	},
+	"logs": {
+	  "logs_collected": {
+		"files": {
+		  "collect_list": [
+			{
+			  "file_path": "C:\\Users\\Administrator\\Documents\\Projects\\RedisDemo\\RedisDemo\\logs\\application.log",
+			  "log_group_name": "/apps/RedisDemoApplicationLogs/",
+			  "log_stream_name": "{ip_address}_{instance_id}",
+			  "timezone": "Local"
+			}
+		  ]
+		}
+	  }
+	}
+  }
